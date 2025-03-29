@@ -1,0 +1,77 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  Lint:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python {{ null|default("${{ matrix.python-version }}", true) }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: {{ null|default("${{ matrix.python-version }}", true) }}
+      - name: Install requirements
+        run: sudo apt update && sudo apt install --yes tox libev-dev libvirt-dev
+      - name: Black
+        run: |
+          tox -e black-check
+  Tests:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.8", "3.10", "3.12", "3.13"]
+    services:
+      postgresql:
+        image: postgres:latest
+        # Provide the password for postgres
+        env:
+          POSTGRES_DB: {{ project.package_name }}
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_USER: {{ project.package_name }}
+          POSTGRES_PASSWORD: pass
+        # Set health checks to wait until postgres has started
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python {{ null|default("${{ matrix.python-version }}", true) }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: {{ null|default("${{ matrix.python-version }}", true) }}
+      - name: Install tox
+        run: sudo apt update && sudo apt install --yes tox libev-dev libvirt-dev
+      - name: Unit tests
+        run: |
+          tox -e {{ null|default("${{ matrix.python-version }}", true) }}
+      - name: Functional tests
+        env:
+          DATABASE_URI: "postgresql://{{ project.package_name }}:pass@localhost:5432/{{ project.package_name }}"
+        run: |
+          tox -e {{ null|default("${{ matrix.python-version }}", true) }}-functional
+  Coverage:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python {{ null|default("${{ matrix.python-version }}", true) }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: {{ null|default("${{ matrix.python-version }}", true) }}
+      - name: Install tox
+        run: sudo apt update && sudo apt install --yes tox libev-dev libvirt-dev
+      - name: Coverage
+        run: |
+          tox -e begin,{{ null|default("${{ matrix.python-version }}", true) }},end

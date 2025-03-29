@@ -1,0 +1,17 @@
+{
+    "project": {
+        "name": "My project",
+        "package_name": "my_project",
+        "description": "My project description",
+        "summary": "My project summary"
+    },
+    "author": {
+        "name": "Genesis Corporation",
+        "email": "eugene@frolov.net.ru"
+    },
+    "template_info": {
+        "name": "py_element",
+        "version": "1.0.0",
+        "path": "./py_element"
+    }
+}

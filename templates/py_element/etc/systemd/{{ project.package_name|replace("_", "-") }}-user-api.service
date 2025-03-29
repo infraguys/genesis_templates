@@ -1,0 +1,14 @@
+[Unit]
+Description={{ project.package_name|replace("_", " ")|title }} User API
+After=network-online.target
+
+[Service]
+TimeoutStopSec=5
+Restart=on-failure
+RestartSec=5s
+KillSignal=SIGINT
+ExecStartPre=/bin/sleep 2
+ExecStart={{ project.package_name|replace("_", "-") }}-user-api --config-file /etc/{{ project.package_name }}/{{ project.package_name }}.conf
+
+[Install]
+WantedBy=multi-user.target
