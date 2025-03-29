@@ -1,0 +1,14 @@
+[Unit]
+Description={{ project.package_name|replace("_", " ")|title }} Builder Agent
+After=network-online.target
+
+[Service]
+TimeoutStopSec=5
+Restart=on-failure
+RestartSec=5s
+KillSignal=SIGINT
+ExecStartPre=/bin/sleep 2
+ExecStart={{ project.package_name|replace("_", "-") }}-builder-agent --config-file /etc/{{ project.package_name }}/{{ project.package_name }}.conf
+
+[Install]
+WantedBy=multi-user.target

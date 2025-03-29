@@ -15,6 +15,7 @@
 #    under the License.
 
 import os
+import logging
 
 import jinja2
 
@@ -74,6 +75,11 @@ class JinjaTemplateRender:
             # Render and copy files
             with open(source_path, "r", encoding="utf-8") as fp1:
                 with open(target_path, "w", encoding="utf-8") as fp2:
+                    logging.info(
+                        "Rendering %s to %s",
+                        source_path,
+                        target_path,
+                    )
                     fp2.write(
                         jinja2.Template(fp1.read()).render(
                             **self._template_settings.settings_vars
