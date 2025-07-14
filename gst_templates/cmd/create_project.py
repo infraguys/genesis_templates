@@ -29,7 +29,7 @@ from gst_templates import settings
 cli_opts = [
     cfg.StrOpt(
         "template_settings",
-        default="./templates/py_dummy.settings.json",
+        default="./templates/py_element.settings.json",
         help="The path to the template settings file.",
     ),
     cfg.StrOpt(
