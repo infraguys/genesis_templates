@@ -19,15 +19,12 @@ from gst_templates import jinja_functions
 
 
 class TemplateSetting:
-
     TEMPLATE_INFO_SECTION = "template_info"
     FUNCTIONS_SECTION = "functions"
 
     def __init__(self, template_setting_path):
         self._template_setting_path = template_setting_path
-        self._settings_vars = self._load_template_settings(
-            template_setting_path
-        )
+        self._settings_vars = self._load_template_settings(template_setting_path)
         self._fill_template_parameters(self._settings_vars)
         super().__init__()
 
@@ -137,9 +134,7 @@ class TemplateSetting:
         :rtype: dict
         """
         copy_settings = self._settings_vars.copy()
-        copy_settings[self.FUNCTIONS_SECTION] = (
-            jinja_functions.get_jinja_functions()
-        )
+        copy_settings[self.FUNCTIONS_SECTION] = jinja_functions.get_jinja_functions()
         return copy_settings
 
     @property
