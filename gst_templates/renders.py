@@ -21,7 +21,6 @@ import jinja2
 
 
 class JinjaTemplateRender:
-
     def __init__(self, template_settings, repository):
         super().__init__()
         self._template_settings = template_settings
@@ -40,9 +39,7 @@ class JinjaTemplateRender:
         """
         self._template_settings.initialize()
 
-        template_path = os.path.join(
-            self._repository.path, "project_settings.json"
-        )
+        template_path = os.path.join(self._repository.path, "project_settings.json")
 
         self._template_settings.save(template_path)
         self._repository.add_file(template_path)
@@ -59,10 +56,7 @@ class JinjaTemplateRender:
 
         # Replace template path prefix to repository path prefix
         target_files = [
-            (
-                self._repository.path
-                + target_file[len(self._template_settings.path) :]
-            )
+            (self._repository.path + target_file[len(self._template_settings.path) :])
             for target_file in target_files
         ]
 

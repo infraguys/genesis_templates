@@ -25,7 +25,6 @@ LOG = logging.getLogger(__name__)
 
 
 class BuilderAgent(basic.BasicService):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

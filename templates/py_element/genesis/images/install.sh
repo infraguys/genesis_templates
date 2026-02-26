@@ -38,6 +38,8 @@ sudo apt dist-upgrade -y
 sudo apt install -y \
     postgresql \
     libev-dev
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source "$HOME"/.local/bin/env
 
 # Default creds for {{ project.package_name|replace('_', ' ') }} services
 sudo -u postgres psql -c "CREATE ROLE $GC_PG_USER WITH LOGIN PASSWORD '$GC_PG_PASS';"
@@ -49,12 +51,9 @@ sudo cp "$GC_PATH/etc/{{ project.package_name }}/{{ project.package_name }}.conf
 sudo cp "$GC_PATH/etc/{{ project.package_name }}/logging.yaml" $GC_CFG_DIR/
 sudo cp "$GC_PATH/genesis/images/bootstrap.sh" $BOOTSTRAP_PATH/0100-gc-bootstrap.sh
 
-mkdir -p "$VENV_PATH"
-python3 -m venv "$VENV_PATH"
+cd "$GC_PATH"
+uv sync
 source "$GC_PATH"/.venv/bin/activate
-pip install pip --upgrade
-pip install -r "$GC_PATH"/requirements.txt
-pip install -e "$GC_PATH"
 
 # Apply migrations
 ra-apply-migration --config-dir "$GC_PATH/etc/{{ project.package_name }}/" --path "$GC_PATH/migrations"

@@ -18,16 +18,20 @@ jobs:
         with:
           python-version: {{ null|default("${{ matrix.python-version }}", true) }}
       - name: Install requirements
-        run: sudo apt update && sudo apt install --yes tox libev-dev libvirt-dev
-      - name: Black
+        run: sudo apt update && sudo apt install --yes libev-dev libvirt-dev
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install tox-uv
+        run: uv tool install tox --with tox-uv
+      - name: ruff
         run: |
-          tox -e black-check
+          tox -e ruff-check
   Tests:
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.8", "3.10", "3.12", "3.13"]
+        python-version: ["3.8", "3.10", "3.11", "3.12", "3.13", "3.14"]
     services:
       postgresql:
         image: postgres:latest
@@ -49,7 +53,11 @@ jobs:
         with:
           python-version: {{ null|default("${{ matrix.python-version }}", true) }}
       - name: Install tox
-        run: sudo apt update && sudo apt install --yes tox libev-dev libvirt-dev
+        run: sudo apt update && sudo apt install --yes libev-dev libvirt-dev
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install tox-uv
+        run: uv tool install tox --with tox-uv  
       - name: Unit tests
         run: |
           tox -e {{ null|default("${{ matrix.python-version }}", true) }}
@@ -71,7 +79,11 @@ jobs:
         with:
           python-version: {{ null|default("${{ matrix.python-version }}", true) }}
       - name: Install tox
-        run: sudo apt update && sudo apt install --yes tox libev-dev libvirt-dev
+        run: sudo apt update && sudo apt install --yes libev-dev libvirt-dev
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+      - name: Install tox-uv
+        run: uv tool install tox --with tox-uv  
       - name: Coverage
         run: |
           tox -e begin,{{ null|default("${{ matrix.python-version }}", true) }},end

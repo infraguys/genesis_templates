@@ -20,7 +20,6 @@ import git
 
 
 class GitRepository:
-
     def __init__(self, repository_path):
         super().__init__()
         self._repository_path = os.path.abspath(repository_path)
