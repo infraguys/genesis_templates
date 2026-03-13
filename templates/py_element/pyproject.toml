@@ -1,5 +1,5 @@
 [project]
-name = "{{ project.name }}"
+name = "{{ project.package_name }}"
 description = "{{ project.summary }}"
 readme = "README.md"
 authors = [{name = "{{ author.name }}", email = "{{ author.email }}"}]
