@@ -24,10 +24,10 @@ class ExampleRoute(routes.Route):
 
 
 class ApiEndpointRoute(routes.Route):
-    """Handler for /v1.0/ endpoint"""
+    """Handler for /v1/ endpoint"""
 
     __controller__ = controllers.ApiEndpointController
     __allow_methods__ = [routes.FILTER]
 
-    # route to /v1.0/examples/[<uuid>]
+    # route to /v1/examples/[<uuid>]
     examples = routes.route(ExampleRoute)
