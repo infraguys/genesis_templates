@@ -54,7 +54,7 @@ def get_openapi_engine():
     openapi_engine = openapi_engines.OpenApiEngine(
         info=openapi_structures.OpenApiInfo(
             title=f"{{ project.package_name|replace('_', ' ')|title }} {versions.API_VERSION_1_0} User API",
-            version=app_version.version_info.release_string(),
+            version=app_version.version_info,
             description=(
                 f"OpenAPI - {{ project.package_name|replace('_', ' ')|title }} {versions.API_VERSION_1_0}"
             ),
