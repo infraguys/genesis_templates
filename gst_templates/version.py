@@ -14,7 +14,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from importlib.metadata import version
 
-import pbr.version
+version_info = version("templater")
 
-version_info = pbr.version.VersionInfo("templater")
+
+if __name__ == "__main__":
+    print(version_info)
